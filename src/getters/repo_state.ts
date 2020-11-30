@@ -1,6 +1,8 @@
 import fs from "fs/promises";
+import fsCallbacks from "fs";
 
 import { Config } from "../config";
+import { Level, Logger } from "../lib/logger";
 
 /**
  * For an array of booleans, checks that all of them are true.
@@ -15,12 +17,11 @@ function allTrue(values: boolean[]): boolean {
  * This does not guarantee the local repository is sane to work with.
  * @param config The application config
  */
-export async function wasRepoCloned(config: Config): Promise<boolean> {
-    const localRepositoryDirExists = fs.stat(config.localRepositoryPath)
-        .then(stats => stats.isDirectory());
-    const localRepositoryDirHasGitSubdir = fs.stat(config.localRepositoryPath + "/.git")
-        .then(stats => stats.isDirectory());
-    
-    return Promise.all([localRepositoryDirExists, localRepositoryDirHasGitSubdir])
-        .then(allTrue);
+export async function wasRepoCloned(config: Config, logger: Logger): Promise<boolean> {
+    try {
+        return await fs.stat(config.localRepositoryPath + "/.git").then(stats => stats.isDirectory())
+    } catch (error) {
+        logger.log(Level.Warning, error);
+        return false;
+    }
 }
