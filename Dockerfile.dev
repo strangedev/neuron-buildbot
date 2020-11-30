@@ -1,6 +1,19 @@
-FROM node:14
+FROM nixos/nix
 WORKDIR /app
 
+# Update nix
+RUN nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
+RUN nix-channel --update
+
+# install
+RUN nix-env -iA nixpkgs.nodejs-14_x
+
+# install neuron
+RUN nix-env -iA cachix -f https://cachix.org/api/v1/install
+RUN cachix use srid
+RUN nix-env -if https://github.com/srid/neuron/archive/master.tar.gz
+
+# install application
 COPY package.json .
 COPY package-lock.json .
 RUN npm install

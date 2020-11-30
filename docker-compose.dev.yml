@@ -8,3 +8,10 @@ services:
             - 8080:8080
         volumes: 
             - ./src:/app/src
+            - ./config.dev.json:/etc/neuron_buildbot/config.json
+        secrets:
+            - neuron_buildbot
+
+secrets:
+    neuron_buildbot:
+        file: ./secrets.dev.json

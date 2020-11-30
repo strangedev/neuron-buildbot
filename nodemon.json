@@ -2,5 +2,5 @@
     "watch": ["src"],
     "ext": ".ts,.js",
     "ignore": [],
-    "exec": "ts-node ./src/index.ts"
+    "exec": "NODE_OPTIONS=\"--trace-warnings\"  ts-node ./src/index.ts"
 }
