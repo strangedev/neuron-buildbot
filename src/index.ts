@@ -14,6 +14,6 @@ loadConfig(logger)
         await preflight(config, secrets, logger);
         registerRoutes(config, secrets, logger, app);
         app.listen(config.port, () => {
-            logger.log(Level.Info, "🎉 Server started.");
+            logger.log(Level.Info, "👂 Listening for push events.");
         });
     });
