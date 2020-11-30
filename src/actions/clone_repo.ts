@@ -8,6 +8,7 @@ import { Secrets } from "../secrets";
 import { Level, Logger } from "../lib/logger";
 
 export async function cloneRepo(config: Config, secrets: Secrets, logger: Logger) {
+    logger.log(Level.Info, `📥 Cloning ${config.repositoryURL}.`);
     try {
         await fsPromises.mkdir(config.localRepositoryPath);
         await git.clone({

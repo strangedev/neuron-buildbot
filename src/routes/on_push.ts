@@ -26,6 +26,7 @@ export function registerRoute(config: Config, secrets: Secrets, logger: Logger, 
 }
 
 async function receivePushEvent(config: Config, secrets: Secrets, logger: Logger, event: PushEvent) {
+    logger.log(Level.Info, "❗ Received a push event.");
     await pullRepo(config, secrets, logger);
     await buildNeuron(config, logger);
 }

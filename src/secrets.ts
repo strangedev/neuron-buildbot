@@ -1,8 +1,9 @@
-import { Level, Logger } from "./lib/logger";
+import fs from "fs/promises";
 import { homedir } from "os";
 import { join } from "path";
+import { Level, Logger } from "./lib/logger";
 import { Config } from "./config";
-import * as fs from "fs/promises";
+
 
 export interface PasswordFlowOptions {
     username: string;
@@ -24,7 +25,7 @@ const USER_SECRETS_FILE = ".neuron_buildbot/secrets.json"
 const SECRETS_ENCODING = "utf8";
 
 export async function loadSecrets(config: Config, logger: Logger): Promise<Secrets> {
-    let secretsPath = "";
+    let secretsPath: string;
     if (config.useDockerSecrets) {
         secretsPath = DOCKER_SECRETS_PATH;
     } else {
@@ -42,7 +43,7 @@ export async function loadSecrets(config: Config, logger: Logger): Promise<Secre
     } catch (error) {
         // we don't actually need any secrets in case the repo is public
         logger.log(Level.Error, error);
-        logger.log(Level.Warning, "No secrets were provided. This will not work for private repositories.");
+        logger.log(Level.Warning, "🔒 No secrets were provided. This will not work for private repositories.");
         return {};
     }
 }

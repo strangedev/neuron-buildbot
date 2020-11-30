@@ -13,6 +13,7 @@ export enum AuthFlow {
 }
 
 export interface Config {
+    port: number,
     repositoryURL: string,
     localRepositoryPath: string;
     provider: Provider;
@@ -35,6 +36,6 @@ export async function loadConfig(logger: Logger): Promise<Config> {
         return JSON.parse(rawUnmarshalledConfig);
     } catch (error) {
         logger.log(Level.Fatal, error);
-        throw "Can't read config!"
+        throw "🚨 Can't read config!";
     }
 }

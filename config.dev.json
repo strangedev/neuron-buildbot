@@ -1,4 +1,5 @@
 {
+    "port": 8080,
     "repositoryURL": "https://github.com/strangedev/test-zettels.git",
     "localRepositoryPath": "/zettels",
     "provider": "GitHub",
