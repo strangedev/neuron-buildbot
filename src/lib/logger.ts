@@ -22,6 +22,6 @@ export class Logger {
 
     log(level: Level, message: Stringable): void {
         const currentTime = new Date();
-        this.write(`[${currentTime}][${level}] ${message}`);
+        this.write(`[${currentTime.toISOString()}][${level}] ${message}`);
     }
 }

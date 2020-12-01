@@ -1,18 +1,20 @@
 import { Config } from "../config";
-import { Level, Logger } from "../lib/logger";
 import shell from "shelljs";
+import { Result, Okay, Fail } from "../lib/result";
+import { NamedError } from "../lib/error";
 
-export function buildNeuron(config: Config, logger: Logger) {
-    logger.log(Level.Info, "🛠️ Building your zettelkasten.")
+class NeuronBuildError extends NamedError("NeuronBuildError") {};
+
+export function buildNeuron(config: Config): Result<string, NeuronBuildError> {
     try {
         const stdout = shell.exec(
             `neuron -d ${config.localRepositoryPath} rib`,
             {
                 silent: true
             }
-        );
-        logger.log(Level.Info, stdout.replace(/\n/g, "\\n") ?? "Nothing was written to stdout while building.");   
+        );  
+        return Okay(stdout.replace(/\n/g, "\\n") ?? "Nothing was written to stdout while building.");
     } catch (error) {
-        logger.log(Level.Error, error);
+        return Fail(new NeuronBuildError(error));
     }
 }

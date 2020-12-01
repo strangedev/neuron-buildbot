@@ -17,11 +17,10 @@ function allTrue(values: boolean[]): boolean {
  * This does not guarantee the local repository is sane to work with.
  * @param config The application config
  */
-export async function wasRepoCloned(config: Config, logger: Logger): Promise<boolean> {
+export async function wasRepoCloned(config: Config): Promise<boolean> {
     try {
         return await fs.stat(config.localRepositoryPath + "/.git").then(stats => stats.isDirectory())
     } catch (error) {
-        logger.log(Level.Warning, error);
         return false;
     }
 }

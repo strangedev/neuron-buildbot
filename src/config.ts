@@ -1,5 +1,6 @@
 import * as fs from "fs/promises";
-import { Level, Logger } from "./lib/logger";
+import { NamedError } from "./lib/error";
+import { Result, Okay, Fail } from "./lib/result";
 
 export enum Provider {
     GitHub = "GitHub",
@@ -8,6 +9,7 @@ export enum Provider {
 };
 
 export enum AuthFlow {
+    None = "None",
     PasswordFlow = "PasswordFlow",
     PATFlow = "PATFlow"
 }
@@ -24,7 +26,9 @@ export interface Config {
 const CONFIGURATION_PATH = "/etc/neuron_buildbot/config.json";
 const CONFIGURATION_ENCODING = "utf8";
 
-export async function loadConfig(logger: Logger): Promise<Config> {
+class CannotReadConfiguration extends NamedError("CannotReadConfiguration") {};
+
+export async function loadConfig(): Promise<Result<Config, CannotReadConfiguration>> {
     try {
         const rawUnmarshalledConfig = await fs.readFile(
             CONFIGURATION_PATH, 
@@ -33,9 +37,8 @@ export async function loadConfig(logger: Logger): Promise<Config> {
             }
         );
         // TODO: this could fail spectacularly downstream
-        return JSON.parse(rawUnmarshalledConfig);
+        return Okay(JSON.parse(rawUnmarshalledConfig));
     } catch (error) {
-        logger.log(Level.Fatal, error);
-        throw "🚨 Can't read config!";
+        return Fail(new CannotReadConfiguration(error));
     }
 }

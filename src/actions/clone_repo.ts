@@ -5,21 +5,27 @@ import * as git from "isomorphic-git";
 import { Config } from "../config";
 import { makeAuthCallback } from "../auth_flows";
 import { Secrets } from "../secrets";
-import { Level, Logger } from "../lib/logger";
+import { Okay, Result, Nil, Fail, nil } from "../lib/result";
+import { NamedError } from "../lib/error";
 
-export async function cloneRepo(config: Config, secrets: Secrets, logger: Logger) {
-    logger.log(Level.Info, `📥 Cloning ${config.repositoryURL}.`);
+class CannotCloneRepository extends NamedError("CannotCloneRepository") {};
+
+export async function cloneRepo(config: Config, secrets: Secrets): Promise<Result<Nil, CannotCloneRepository>> {
     try {
         await fsPromises.mkdir(config.localRepositoryPath);
+    } catch (error) {
+        // the directory might already exist
+    }
+    try {
         await git.clone({
             fs,
             http,
             dir: config.localRepositoryPath,
             url: config.repositoryURL,
-            onAuth: makeAuthCallback(config, secrets)
+            onAuth: makeAuthCallback(config, secrets).orCrash()
         })
+        return Okay(nil);
     } catch (error) {
-        logger.log(Level.Error, error);
-        throw "Can't clone the repository.";
+        return Fail(new CannotCloneRepository(error));
     }
 }
