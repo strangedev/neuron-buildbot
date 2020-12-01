@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as http from "isomorphic-git/http/node";
-import { pull } from "isomorphic-git";
+import { fastForward, pull } from "isomorphic-git";
 import { Config } from "../config";
 import { Secrets } from "../secrets";
 import { makeAuthCallback } from "../auth_flows";
@@ -11,7 +11,7 @@ class CannotPullRepository extends NamedError("CannotPullRepository") {};
 
 export async function pullRepo(config: Config, secrets: Secrets): Promise<Result<Nil, CannotPullRepository>>{
     try {
-        await pull({
+        await fastForward({
             fs,
             http,
             dir: config.localRepositoryPath,
