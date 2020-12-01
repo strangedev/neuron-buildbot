@@ -19,12 +19,10 @@ export function registerRoute(config: Config, secrets: Secrets, logger: Logger, 
             return;
         }
         pushEvent = unmarshalResult.value;
-        
-        const routeHandlerResult = (await pullAndBuild(config, secrets, logger, pushEvent))
-        if (routeHandlerResult.failed) {
-            response.status(500).send();
-            return;
-        }  
+        // allready send a response as not to time out
+        response.status(202).send();
+
+        await pullAndBuild(config, secrets, logger, pushEvent);
         
     });
 }
@@ -37,7 +35,7 @@ async function pullAndBuild(config: Config, secrets: Secrets, logger: Logger, ev
         return Fail(pull.error);
     }
     
-    const build = await buildNeuron(config);
+    const build = buildNeuron(config);
     if (build.failed) {
         logger.log(Level.Error, `💥 Cannot build your zettelkasten: ${build.error}`);
         return Fail(build.error);
