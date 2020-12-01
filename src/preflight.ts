@@ -16,11 +16,11 @@ export async function preflight(config: Config, secrets: Secrets, logger: Logger
             return error;
         });
         // build for the first time
-        const buildLog = buildNeuron(config).unpack(error => {
+        buildNeuron(config).unpack(error => {
             logger.log(Level.Fatal, "🚨 Neuron is not working!");
             return error;
         });
-        logger.log(Level.Info, buildLog);
+        logger.log(Level.Info, "🔨 Built zettelkasten.");
     }
     logger.log(Level.Info, "🛫 Enjoy your flight!");
 }

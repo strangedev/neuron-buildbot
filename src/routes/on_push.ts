@@ -28,18 +28,19 @@ export function registerRoute(config: Config, secrets: Secrets, logger: Logger, 
 }
 
 async function pullAndBuild(config: Config, secrets: Secrets, logger: Logger, event: PushEvent): Promise<Result<Nil, Error>> {
-    logger.log(Level.Info, `📥 Pulling the newest version of ${config.repositoryURL}.`);
     const pull = await pullRepo(config, secrets);
     if (pull.failed) {
         logger.log(Level.Error, `💥 Cannot pull from ${config.repositoryURL}: ${pull.error}`);
         return Fail(pull.error);
     }
+    logger.log(Level.Info, `📥 Pulled the newest version of ${config.repositoryURL}.`);
     
     const build = buildNeuron(config);
     if (build.failed) {
         logger.log(Level.Error, `💥 Cannot build your zettelkasten: ${build.error}`);
         return Fail(build.error);
     }
+    logger.log(Level.Info, "🔨 Built zettelkasten.");
 
     return Okay(nil);
 }
