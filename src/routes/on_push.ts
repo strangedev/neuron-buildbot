@@ -14,7 +14,7 @@ export function registerRoute(config: Config, secrets: Secrets, logger: Logger, 
         const unmarshalResult = unmarshalPushEvent(request.body)
         let pushEvent: PushEvent;
         if (unmarshalResult.failed) {
-            logger.log(Level.Error, `⁉️ Cannot unmarshal request: ${unmarshalResult.error}`);
+            logger.log(Level.Error, `⁉️  Cannot unmarshal request: ${unmarshalResult.error}`);
             response.status(400).send();
             return;
         }

@@ -15,13 +15,12 @@ export class CannotUnmarshalPushEvent extends NamedError("CannotUnmarshalPushEve
  * 
  * @param jsonFormatted A json formatted string containing the push event.
  */
-export function unmarshalPushEvent(jsonFormatted: string): Result<PushEvent, CannotUnmarshalPushEvent> {
+export function unmarshalPushEvent(payload: any): Result<PushEvent, CannotUnmarshalPushEvent> {
     try {
-        const rawUnmarshalledPushEvent = JSON.parse(jsonFormatted);
         return Okay({
-            ref: rawUnmarshalledPushEvent.ref,
-            before: rawUnmarshalledPushEvent.before,
-            after: rawUnmarshalledPushEvent.after
+            ref: payload.ref,
+            before: payload.before,
+            after: payload.after
         });
     } catch (error) {
         return Fail(new CannotUnmarshalPushEvent(error));

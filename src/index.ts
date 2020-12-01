@@ -6,7 +6,6 @@ import { loadSecrets } from "./secrets";
 import { preflight } from "./preflight";
 import { registerRoutes } from "./routes";
 
-const app = express();
 const logger = new Logger();
 
 loadConfig()
@@ -22,6 +21,9 @@ loadConfig()
         });
 
         await preflight(config, secrets, logger);
+        
+        const app = express();
+        app.use(express.json());
         registerRoutes(config, secrets, logger, app);
         app.listen(config.port, () => {
             logger.log(Level.Info, "👂 Listening for push events.");
