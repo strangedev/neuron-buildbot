@@ -1,76 +1,88 @@
-import { exit } from "process";
-import { NamedError } from "./error";
+import { errors } from './error';
+import { exit } from 'process';
 
-export class MaybeNotChecked extends NamedError("MaybeNotChecked") {};
-export class ErrorDoesNotExist extends NamedError("ErrorDoesNotExist") {};
-export class ValueDoesNotExist extends NamedError("ValueDoesNotExist") {};
+class Result<TValue, TError extends Error> {
+  private readonly internalValue?: TValue;
 
-export class Result<V, E extends Error> {
-    private _value?: V;
-    private _error?: E;
-    private checked: boolean;
+  private readonly internalError?: TError;
 
-    constructor(value?: V, error?: E) {
-        this.checked = false;
-        this._value = value;
-        this._error = error;
+  private checked: boolean;
+
+  public constructor (value?: TValue, error?: TError) {
+    this.checked = false;
+    this.internalValue = value;
+    this.internalError = error;
+  }
+
+  public get failed (): boolean {
+    this.checked = true;
+
+    return this.internalValue === undefined;
+  }
+
+  public get value (): TValue {
+    if (!this.checked) {
+      throw new errors.ResultNotChecked();
+    }
+    if (this.internalValue === undefined) {
+      throw new errors.ValueDoesNotExist();
     }
 
-    get failed(): boolean {
-        this.checked = true;
-        return this._value === undefined;
+    return this.internalValue;
+  }
+
+  public get error (): TError {
+    if (!this.checked) {
+      throw new errors.ResultNotChecked();
+    }
+    if (this.internalError === undefined) {
+      throw new errors.ErrorDoesNotExist();
     }
 
-    get value(): V {
-        if (!this.checked) {
-            throw new MaybeNotChecked;
-        }
-        if (this._value === undefined) {
-            throw new ValueDoesNotExist;
-        }
-        return this._value;
-    }
+    return this.internalError;
+  }
 
-    get error(): E {
-        if (!this.checked) {
-            throw new MaybeNotChecked;
-        }
-        if (this._error === undefined) {
-            throw new ErrorDoesNotExist;
-        }
-        return this._error;
-    }
+  public unpack (recovery: RecoveryFunction<TValue, TError>): TValue {
+    if (this.failed) {
+      const recoveryResult = recovery(this.error);
 
-    unpack(recovery: RecoveryFunction<V, E>): V {
-        if (this.failed) {
-            const recoveryResult = recovery(this.error);
-            if (recoveryResult instanceof Error) {
-                console.log(`Unrecoverable error: ${recoveryResult}`);
-                exit(1);
-            } else {
-                return recoveryResult;
-            }
-        } else {
-            return this.value;
-        }
+      if (recoveryResult instanceof Error) {
+        // eslint-disable-next-line no-console
+        console.log(`Unrecoverable error: ${recoveryResult.message}`);
+        exit(1);
+      } else {
+        return recoveryResult;
+      }
+    } else {
+      return this.value;
     }
+  }
 
-    orCrash(): V {
-        return this.unpack(error => error);
-    }
+  public orCrash (): TValue {
+    return this.unpack((error): TError => error);
+  }
 }
 
-export interface RecoveryFunction<V, E extends Error> {
-    (maybe: E): V | Error;
-}
+type RecoveryFunction<TValue, TError extends Error> = (maybe: TError) => TValue | Error;
 
-export function Okay<V, E extends Error>(value: V): Result<V, E> {
-    return new Result<V, E>(value, undefined);
-}
+const okay = function<TValue, TError extends Error> (value: TValue): Result<TValue, TError> {
+  return new Result<TValue, TError>(value, undefined);
+};
 
-export function Fail<V, E extends Error>(error: E): Result<V, E> {
-    return new Result<V, E>(undefined, error);
-}
+const fail = function<TValue, TError extends Error> (error: TError): Result<TValue, TError> {
+  return new Result<TValue, TError>(undefined, error);
+};
 
-export type Nil = null;
-export const nil = null;
+type Nil = symbol;
+const nil = Symbol('nil');
+
+export type {
+  RecoveryFunction,
+  Nil
+};
+export {
+  Result,
+  okay,
+  fail,
+  nil
+};
