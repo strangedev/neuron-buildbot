@@ -1,2 +1,4 @@
 node_modules/
 build/
+# we don't have ideas around here
+.idea/
