@@ -25,7 +25,7 @@ const cloneRepo = async function (config: Config, secrets: Secrets): Promise<Res
 
     return okay(nil);
   } catch (ex: unknown) {
-    return fail(new errors.CannotCloneRepository(undefined, { cause: ex }));
+    return fail(new errors.CloningRepositoryFailed(undefined, { cause: ex }));
   }
 };
 

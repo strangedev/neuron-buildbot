@@ -2,7 +2,7 @@ import { buildNeuron } from './actions/buildNeuron';
 import { cloneRepo } from './actions/cloneRepo';
 import { Config } from './config';
 import { Secrets } from './secrets';
-import { wasRepoCloned } from './getters/repo_state';
+import { wasRepoCloned } from './getters/repoState';
 import { Level, Logger } from './lib/logger';
 
 const preflight = async function (config: Config, secrets: Secrets, logger: Logger): Promise<void> {
