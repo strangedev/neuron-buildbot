@@ -43,10 +43,10 @@ const loadConfig = async function (): Promise<Result<Config, CustomError>> {
 };
 
 export type {
-  Provider,
-  AuthFlow,
   Config
 };
 export {
+  Provider,
+  AuthFlow,
   loadConfig
 };

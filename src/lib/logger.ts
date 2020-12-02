@@ -31,5 +31,6 @@ export type {
   Stringable
 };
 export {
-  Logger
+  Logger,
+  Level
 };

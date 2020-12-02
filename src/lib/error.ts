@@ -1,12 +1,14 @@
-export class ErrorClass extends Error {}
+import { defekt } from 'defekt';
 
-export function NamedError(name: string): typeof ErrorClass {
-    const foo = class extends Error {
-        stackTraceLimit: number = 10;
-        constructor(message?: string | undefined) {
-            super(message)
-            this.name = name;
-        }
-    };
-    return foo;
-}
+export const errors = defekt({
+  UnableToLoadSecrets: {},
+  ResultNotChecked: {},
+  ErrorDoesNotExist: {},
+  ValueDoesNotExist: {},
+  UnableToLoadConfiguration: {},
+  AuthenticationMisconfigured: {},
+  ProviderIsUnknown: {},
+  NeuronBuildError: {},
+  CannotCloneRepository: {},
+  CannotPullRepository: {}
+});

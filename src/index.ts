@@ -1,4 +1,4 @@
-import { die } from './lib/fail';
+import { die } from './lib/die';
 import express from 'express';
 import { loadConfig } from './config';
 import { preflight } from './preflight';
