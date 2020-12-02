@@ -8,11 +8,11 @@ import { buildNeuron } from "../actions/build_neuron";
 import { Okay, Result, nil, Nil, Fail } from "../lib/result";
 
 export function registerRoute(config: Config, secrets: Secrets, logger: Logger, app: Application): void {
-    app.post("/pushed", async (request: Request, response: Response, next: NextFunction) => {
+    app.post("/pushed", async (request: Request, response: Response) => {
         logger.log(Level.Info, "❗ Received a push event.");
         
         // TODO: implement different providers
-        const unmarshalResult = unmarshalPushEvent(request.body)
+        const unmarshalResult = unmarshalPushEvent(request.body);
         let pushEvent: PushEvent;
         if (unmarshalResult.failed) {
             logger.log(Level.Error, `⁉️  Cannot unmarshal request: ${unmarshalResult.error}`);
@@ -20,11 +20,10 @@ export function registerRoute(config: Config, secrets: Secrets, logger: Logger, 
             return;
         }
         pushEvent = unmarshalResult.value;
-        // allready send a response as not to time out
+        // already send a response as not to time out
         response.status(202).send();
 
         await pullAndBuild(config, secrets, logger, pushEvent);
-        
     });
 }
 
