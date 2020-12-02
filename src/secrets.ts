@@ -18,7 +18,7 @@ export interface TokenFlowOptions {
 
 export interface Secrets {
   passwordFlowOptions?: PasswordFlowOptions;
-  patFlowOptions?: TokenFlowOptions;
+  tokenFlowOptions?: TokenFlowOptions;
 }
 
 const dockerSecretsPath = '/run/secrets/neuron_buildbot';
