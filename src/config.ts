@@ -1,44 +1,52 @@
-import * as fs from "fs/promises";
-import { NamedError } from "./lib/error";
-import { Result, Okay, Fail } from "./lib/result";
+import { CustomError } from 'defekt';
+import { errors } from './lib/error';
+import fs from 'fs/promises';
+import { fail, okay, Result } from './lib/result';
 
-export enum Provider {
-    GitHub = "GitHub",
-    GitLab = "GitLab",
-    gitea = "gitea"
+enum Provider {
+  GitHub = 'GitHub',
+  GitLab = 'GitLab',
+  gitea = 'gitea'
+}
+
+enum AuthFlow {
+  None = 'None',
+  PasswordFlow = 'PasswordFlow',
+  TokenFlow = 'TokenFlow'
+}
+
+interface Config {
+  port: number;
+  repositoryUrl: string;
+  localRepositoryPath: string;
+  provider: Provider;
+  authFlow: AuthFlow;
+  useDockerSecrets: boolean;
+}
+
+const configurationPath = '/etc/neuron_buildbot/config.json';
+const configurationEncoding = 'utf8';
+
+const loadConfig = async function (): Promise<Result<Config, CustomError>> {
+  try {
+    const rawUnmarshalledConfig = await fs.readFile(
+      configurationPath,
+      {
+        encoding: configurationEncoding
+      }
+    );
+
+    return okay(JSON.parse(rawUnmarshalledConfig));
+  } catch (ex: unknown) {
+    return fail(new errors.UnableToLoadConfiguration(undefined, { cause: ex }));
+  }
 };
 
-export enum AuthFlow {
-    None = "None",
-    PasswordFlow = "PasswordFlow",
-    PATFlow = "PATFlow"
-}
-
-export interface Config {
-    port: number,
-    repositoryURL: string,
-    localRepositoryPath: string;
-    provider: Provider;
-    authFlow: AuthFlow;
-    useDockerSecrets: boolean
-}
-
-const CONFIGURATION_PATH = "/etc/neuron_buildbot/config.json";
-const CONFIGURATION_ENCODING = "utf8";
-
-class CannotReadConfiguration extends NamedError("CannotReadConfiguration") {};
-
-export async function loadConfig(): Promise<Result<Config, CannotReadConfiguration>> {
-    try {
-        const rawUnmarshalledConfig = await fs.readFile(
-            CONFIGURATION_PATH, 
-            {
-                encoding: CONFIGURATION_ENCODING
-            }
-        );
-        // TODO: this could fail spectacularly downstream
-        return Okay(JSON.parse(rawUnmarshalledConfig));
-    } catch (error) {
-        return Fail(new CannotReadConfiguration(error));
-    }
-}
+export type {
+  Provider,
+  AuthFlow,
+  Config
+};
+export {
+  loadConfig
+};

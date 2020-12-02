@@ -21,18 +21,18 @@ export interface Secrets {
   patFlowOptions?: TokenFlowOptions;
 }
 
-const DockerSecretsPath = '/run/secrets/neuron_buildbot';
-const UserSecretsFile = '.neuron_buildbot/secrets.json';
-const SecretsEncoding = 'utf8';
+const dockerSecretsPath = '/run/secrets/neuron_buildbot';
+const userSecretsFile = '.neuron_buildbot/secrets.json';
+const secretsEncoding = 'utf8';
 
 export const loadSecrets = async function (config: Config): Promise<Result<Secrets, CustomError>> {
-  const secretsPath = config.useDockerSecrets ? DockerSecretsPath : path.join(homedir(), UserSecretsFile);
+  const secretsPath = config.useDockerSecrets ? dockerSecretsPath : path.join(homedir(), userSecretsFile);
 
   try {
     const rawUnmarshalledSecrets = await fs.readFile(
       secretsPath,
       {
-        encoding: SecretsEncoding
+        encoding: secretsEncoding
       }
     );
 
