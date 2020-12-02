@@ -9,6 +9,7 @@ export const errors = defekt({
   AuthenticationMisconfigured: {},
   ProviderIsUnknown: {},
   NeuronBuildError: {},
-  CannotCloneRepository: {},
-  CannotPullRepository: {}
+  CloningRepositoryFailed: {},
+  PullingRepositoryFailed: {},
+  UnmarshallingPullEventFailed: {}
 });

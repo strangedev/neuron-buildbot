@@ -19,7 +19,7 @@ const pullRepo = async function (config: Config, secrets: Secrets): Promise<Resu
 
     return okay(nil);
   } catch (ex: unknown) {
-    return fail(new errors.CannotPullRepository(undefined, { cause: ex }));
+    return fail(new errors.PullingRepositoryFailed(undefined, { cause: ex }));
   }
 };
 
