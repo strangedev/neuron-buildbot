@@ -1,7 +1,6 @@
 import fs from "fs/promises";
 import { homedir } from "os";
 import { join } from "path";
-import { Level, Logger } from "./lib/logger";
 import { Config } from "./config";
 import { Result, Okay, Fail } from "./lib/result";
 
@@ -11,7 +10,7 @@ export interface PasswordFlowOptions {
 }
 
 export interface PATFlowOptions {
-    username?: string;
+    username: string;
     token: string;
 }
 
