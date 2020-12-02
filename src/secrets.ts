@@ -1,47 +1,43 @@
-import fs from "fs/promises";
-import { homedir } from "os";
-import { join } from "path";
-import { Config } from "./config";
-import { Result, Okay, Fail } from "./lib/result";
+import { Config } from './config';
+import { CustomError } from 'defekt';
+import { errors } from './lib/error';
+import fs from 'fs/promises';
+import { homedir } from 'os';
+import path from 'path';
+import { fail, okay, Result } from './lib/result';
 
 export interface PasswordFlowOptions {
-    username: string;
-    password: string;
+  username: string;
+  password: string;
 }
 
-export interface PATFlowOptions {
-    username: string;
-    token: string;
+export interface TokenFlowOptions {
+  username: string;
+  token: string;
 }
 
 export interface Secrets {
-    passwordFlowOptions?: PasswordFlowOptions;
-    patFlowOptions?: PATFlowOptions;
+  passwordFlowOptions?: PasswordFlowOptions;
+  patFlowOptions?: TokenFlowOptions;
 }
 
-const DOCKER_SECRETS_PATH = "/run/secrets/neuron_buildbot";
-const USER_SECRETS_FILE = ".neuron_buildbot/secrets.json"
-const SECRETS_ENCODING = "utf8";
+const DockerSecretsPath = '/run/secrets/neuron_buildbot';
+const UserSecretsFile = '.neuron_buildbot/secrets.json';
+const SecretsEncoding = 'utf8';
 
-export class UnableToLoadSecrets extends Error {};
+export const loadSecrets = async function (config: Config): Promise<Result<Secrets, CustomError>> {
+  const secretsPath = config.useDockerSecrets ? DockerSecretsPath : path.join(homedir(), UserSecretsFile);
 
-export async function loadSecrets(config: Config): Promise<Result<Secrets, UnableToLoadSecrets>> {
-    let secretsPath: string;
-    if (config.useDockerSecrets) {
-        secretsPath = DOCKER_SECRETS_PATH;
-    } else {
-        secretsPath = join(homedir(), USER_SECRETS_FILE);
-    }
-    try {
-        const rawUnmarshalledSecrets = await fs.readFile(
-            secretsPath,
-            {
-                encoding: SECRETS_ENCODING
-            }
-        )
-        // TODO: this could fail spectacularly downstream
-        return Okay(JSON.parse(rawUnmarshalledSecrets));
-    } catch (error) {
-        return Fail(new UnableToLoadSecrets(error));
-    }
-}
+  try {
+    const rawUnmarshalledSecrets = await fs.readFile(
+      secretsPath,
+      {
+        encoding: SecretsEncoding
+      }
+    );
+
+    return okay(JSON.parse(rawUnmarshalledSecrets));
+  } catch (ex: unknown) {
+    return fail(new errors.UnableToLoadSecrets(undefined, { cause: ex }));
+  }
+};
