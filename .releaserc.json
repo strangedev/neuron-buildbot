@@ -15,5 +15,8 @@
       }
     ],
     ["semantic-release-docker", { "name": "docker.pkg.github.com/strangedev/neuron-buildbot/neuron-buildbot" }]
-  ]
+  ],
+  "verifyConditions": {
+    "registryUrl": "docker.pkg.github.com"
+  }
 }
