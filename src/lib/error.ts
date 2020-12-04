@@ -11,5 +11,8 @@ export const errors = defekt({
   NeuronBuildError: {},
   CloningRepositoryFailed: {},
   PullingRepositoryFailed: {},
-  UnmarshallingPullEventFailed: {}
+  UnmarshallingPullEventFailed: {},
+  FetchingRepositoryFailed: {},
+  CheckingOutBranchFailed: {},
+  GettingRemoteInfoFailed: {}
 });
