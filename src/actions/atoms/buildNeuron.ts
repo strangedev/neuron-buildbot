@@ -1,8 +1,8 @@
-import { Config } from '../config';
+import { Config } from '../../config';
 import { CustomError } from 'defekt';
-import { errors } from '../lib/error';
+import { errors } from '../../lib/error';
 import shell from 'shelljs';
-import { fail, okay, Result } from '../lib/result';
+import { fail, okay, Result } from '../../lib/result';
 
 const buildNeuron = function (config: Config): Result<string, CustomError> {
   try {
