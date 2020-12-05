@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/strangedev/neuron-buildbot/compare/v1.2.1...v1.2.2) (2020-12-05)
+
+
+### Bug Fixes
+
+* revert 4c461b0, now pulling again ([0d9fdf2](https://github.com/strangedev/neuron-buildbot/commit/0d9fdf29ed13103eeb4e4f2602c2303c273df208)), closes [#1](https://github.com/strangedev/neuron-buildbot/issues/1)
+
 ## [1.2.1](https://github.com/strangedev/neuron-buildbot/compare/v1.2.0...v1.2.1) (2020-12-05)
 
 
