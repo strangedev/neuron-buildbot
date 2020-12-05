@@ -28,7 +28,7 @@ RUN nix-env -iA nixpkgs.nodejs-14_x
 # install neuron
 RUN nix-env -iA cachix -f https://cachix.org/api/v1/install
 RUN cachix use srid
-RUN nix-env -if https://github.com/srid/neuron/archive/master.tar.gz
+RUN nix-env -if https://github.com/srid/neuron/archive/5b6f9867d48dde1662c0e9adb5b1779f9ec214cd.tar.gz
 
 # install application
 COPY package.json .
