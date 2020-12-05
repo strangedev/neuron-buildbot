@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/strangedev/neuron-buildbot/compare/v1.2.0...v1.2.1) (2020-12-05)
+
+
+### Bug Fixes
+
+* Handle signals through tini ([8c5401a](https://github.com/strangedev/neuron-buildbot/commit/8c5401a6a56a9475097370a5f3a1d5519edea851))
+
 # [1.2.0](https://github.com/strangedev/neuron-buildbot/compare/v1.1.1...v1.2.0) (2020-12-05)
 
 
