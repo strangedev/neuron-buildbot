@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/strangedev/neuron-buildbot/compare/v1.2.2...v1.3.0) (2020-12-05)
+
+
+### Features
+
+* checkout with detached head, fix [#1](https://github.com/strangedev/neuron-buildbot/issues/1) ([fcae53f](https://github.com/strangedev/neuron-buildbot/commit/fcae53fe00f8b9ac5dbb2afe2b767ad9aee3d1c6))
+
 ## [1.2.2](https://github.com/strangedev/neuron-buildbot/compare/v1.2.1...v1.2.2) (2020-12-05)
 
 
