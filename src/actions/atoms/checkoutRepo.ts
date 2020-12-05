@@ -2,7 +2,7 @@ import { Config } from '../../config';
 import { CustomError } from 'defekt';
 import { errors } from '../../lib/error';
 import fs from 'fs';
-import { getRemoteHeadRef } from '../../getters/remoteState';
+import { getRemoteHeadBranch } from '../../getters/remoteState';
 import git from 'isomorphic-git';
 import { RemoteName } from '../../defaults';
 import { Secrets } from '../../secrets';
@@ -10,7 +10,7 @@ import { fail, nil, Nil, okay, Result } from '../../lib/result';
 
 const checkoutRepoWithDetachedHead = async function (config: Config, secrets: Secrets): Promise<Result<Nil, CustomError>> {
   try {
-    const defaultBranchResult = await getRemoteHeadRef(config, secrets);
+    const defaultBranchResult = await getRemoteHeadBranch(config, secrets);
 
     if (defaultBranchResult.failed) {
       return fail(defaultBranchResult.error);
@@ -20,7 +20,7 @@ const checkoutRepoWithDetachedHead = async function (config: Config, secrets: Se
       fs,
       dir: config.localRepositoryPath,
       remote: RemoteName,
-      ref: defaultBranchResult.value
+      ref: `${RemoteName}/${defaultBranchResult.value}`
     });
 
     return okay(nil);

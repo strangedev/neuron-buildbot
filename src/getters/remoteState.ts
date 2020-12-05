@@ -7,7 +7,7 @@ import { makeAuthCallback } from '../auth_flows';
 import { Secrets } from '../secrets';
 import { fail, okay, Result } from '../lib/result';
 
-const getRemoteHeadRef = async function (config: Config, secrets: Secrets): Promise<Result<string, CustomError>> {
+const getRemoteHeadBranch = async function (config: Config, secrets: Secrets): Promise<Result<string, CustomError>> {
   try {
     const remoteInfo: any = await git.getRemoteInfo({
       http,
@@ -15,12 +15,12 @@ const getRemoteHeadRef = async function (config: Config, secrets: Secrets): Prom
       url: config.repositoryUrl
     });
 
-    return okay(remoteInfo.HEAD);
+    return okay(remoteInfo.HEAD.replace('refs/heads/', ''));
   } catch (ex: unknown) {
     return fail(new errors.GettingRemoteInfoFailed(undefined, { cause: ex }));
   }
 };
 
 export {
-  getRemoteHeadRef
+  getRemoteHeadBranch
 };

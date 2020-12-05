@@ -20,6 +20,9 @@ RUN nix-env -iA cachix -f https://cachix.org/api/v1/install
 RUN cachix use srid
 RUN nix-env -if https://github.com/srid/neuron/archive/${NEURON_VERSION}.tar.gz
 
+# install git for debugging
+RUN apk add git
+
 # install application
 COPY package.json .
 COPY package-lock.json .
