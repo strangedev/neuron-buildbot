@@ -1,30 +1,20 @@
 import { buildNeuron } from '../atoms/buildNeuron';
-import { checkoutRepoWithDetachedHead } from '../atoms/checkoutRepo';
 import { Config } from '../../config';
 import { CustomError } from 'defekt';
-import { fetchRepo } from '../atoms/fetchRepo';
+import { pullRepo } from '../atoms/pullRepo';
 import { Secrets } from '../../secrets';
 import { fail, Nil, nil, okay, Result } from '../../lib/result';
 import { Level, Logger } from '../../lib/logger';
 
 const updateAndBuild = async function (config: Config, secrets: Secrets, logger: Logger): Promise<Result<Nil, CustomError>> {
-  const fetch = await fetchRepo(config, secrets);
+  const pull = await pullRepo(config, secrets);
 
-  if (fetch.failed) {
-    logger.log(Level.Error, `💥 Cannot fetch from ${config.repositoryUrl}: ${fetch.error.message}`);
+  if (pull.failed) {
+    logger.log(Level.Error, `💥 Cannot pull from ${config.repositoryUrl}: ${pull.error.message}`);
 
-    return fail(fetch.error);
+    return fail(pull.error);
   }
-  logger.log(Level.Info, `📥 Fetched the changes from ${config.repositoryUrl}.`);
-
-  const checkout = await checkoutRepoWithDetachedHead(config, secrets);
-
-  if (checkout.failed) {
-    logger.log(Level.Error, `💥 Cannot checkout remote HEAD: ${checkout.error.message}`);
-
-    return fail(checkout.error);
-  }
-  logger.log(Level.Info, `📥 Checked out ${config.repositoryUrl}'s HEAD.`);
+  logger.log(Level.Info, `📥 Pulled changes from ${config.repositoryUrl}.`);
 
   const build = buildNeuron(config);
 
