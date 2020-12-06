@@ -1,6 +1,6 @@
 {
   "name": "nodemon-buildbot",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Builds a zettelkasten that is stored in a git repo when triggered by a webhook.",
   "main": "src/index.ts",
   "scripts": {

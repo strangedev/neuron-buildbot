@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/strangedev/neuron-buildbot/compare/v1.3.0...v1.4.0) (2020-12-06)
+
+
+### Features
+
+* test update & build on every startup ([2c0a987](https://github.com/strangedev/neuron-buildbot/commit/2c0a98760e1a0c57f6bb7c4b104b1d69c4fcb545))
+
 # [1.3.0](https://github.com/strangedev/neuron-buildbot/compare/v1.2.2...v1.3.0) (2020-12-05)
 
 
