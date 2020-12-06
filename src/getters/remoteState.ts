@@ -3,7 +3,7 @@ import { CustomError } from 'defekt';
 import { errors } from '../lib/error';
 import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
-import { makeAuthCallback } from '../auth_flows';
+import { makeAuthCallback } from '../authFlows';
 import { Secrets } from '../secrets';
 import { fail, okay, Result } from '../lib/result';
 

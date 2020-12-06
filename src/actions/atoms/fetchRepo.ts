@@ -4,7 +4,7 @@ import { errors } from '../../lib/error';
 import fs from 'fs';
 import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
-import { makeAuthCallback } from '../../auth_flows';
+import { makeAuthCallback } from '../../authFlows';
 import { Secrets } from '../../secrets';
 import { fail, nil, Nil, okay, Result } from '../../lib/result';
 
