@@ -11,19 +11,14 @@ const preflight = async function (config: Config, secrets: Secrets, logger: Logg
     // Initial cloning of the repo
     logger.log(Level.Info, '🚧 Repo does not seem to exist locally.');
     logger.log(Level.Info, `📥 Cloning ${config.repositoryUrl}.`);
-    (await cloneRepo(config, secrets)).unpack((ex: Error): Error => {
-      logger.log(Level.Fatal, '🚨 Can\'t clone the repository!');
 
-      return ex;
-    });
-
-    // Build for the first time
-    (await updateAndBuild(config, secrets, logger)).unpack((ex: Error): Error => {
-      logger.log(Level.Fatal, '🚨 Initial build failed!');
-
-      return ex;
-    });
+    (await cloneRepo(config, secrets)).orCrash();
   }
+
+  // Check if the update and build facilites work so that we
+  // don't have to trigger a webhook.
+  (await updateAndBuild(config, secrets, logger)).orCrash();
+
   logger.log(Level.Info, '🛫 Enjoy your flight!');
 };
 

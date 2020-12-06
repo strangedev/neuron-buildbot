@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2019",
     "module": "commonjs",
-    "lib": ["ES2020"],
+    "lib": ["ES2019"],
     "allowJs": true,
     "outDir": "build",
     "rootDir": "src",
@@ -11,6 +11,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "."
   }
 }
