@@ -1,11 +1,9 @@
 /* eslint-disable prefer-arrow-callback */
 import { ChildProcess } from 'child_process';
-import fs from 'fs';
 import { Logger } from '../../src/lib/logger';
-import os from 'os';
-import path from 'path';
 import { preflight } from '../../src/preflight';
 import shell from 'shelljs';
+import TmpDir from '../shared/tmpDir';
 import { assert, stub } from 'sinon';
 import { AuthFlow, Provider } from '../../src/config';
 
@@ -14,7 +12,7 @@ suite('preflight', function (): void {
 
   setup(async function (): Promise<void> {
     this.logger = new Logger();
-    this.tmpDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'test-'));
+    this.tmpDir = await TmpDir.create();
     this.configs = {
       broken: {
         port: 8_080,
@@ -36,7 +34,7 @@ suite('preflight', function (): void {
   });
 
   teardown(async function (): Promise<void> {
-    await fs.promises.rm(this.tmpDir, { recursive: true, force: true });
+    await TmpDir.remove(this.tmpDir);
   });
 
   test('crashes when it can\'t clone the repository.', async function (): Promise<void> {
