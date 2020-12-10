@@ -10,6 +10,8 @@ import { assert, stub } from 'sinon';
 import { AuthFlow, Provider } from '../../src/config';
 
 suite('preflight', function (): void {
+  this.timeout(8_000);
+
   setup(async function (): Promise<void> {
     this.logger = new Logger();
     this.tmpDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'test-'));
