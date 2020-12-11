@@ -18,7 +18,7 @@ const makeAuthCallback = function (config: Config, secrets: Secrets): Result<Aut
       }));
     case AuthFlow.TokenFlow:
       if (secrets.tokenFlowOptions === undefined) {
-        return fail(new errors.AuthenticationMisconfigured('patFlowOptions need to be set in order to use the PAT flow.'));
+        return fail(new errors.AuthenticationMisconfigured('tokenFlowOptions need to be set in order to use the PAT flow.'));
       }
 
       return okay((): GitAuth => ({
