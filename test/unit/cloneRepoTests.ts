@@ -1,11 +1,8 @@
 import { assert } from 'assertthat';
 import { cloneRepo } from 'src/actions/atoms/cloneRepo';
-import { fail } from 'assert';
-import fs from 'fs';
-import path from 'path';
+import { isGitRepository } from 'test/shared/git';
 import TmpDir from '../shared/tmpDir';
 import { AuthFlow, Provider } from 'src/config';
-import { isGitRepository } from 'test/shared/git';
 
 /* eslint-disable prefer-arrow-callback */
 suite('cloneRepo', function (): void {
@@ -78,7 +75,6 @@ suite('cloneRepo', function (): void {
     const result = await cloneRepo(this.configs.nonexistentRepo.config, this.configs.nonexistentRepo.secrets);
 
     assert.that(result.failed).is.true();
-    assert.that(await isGitRepository(this.configs.nonexistentRepo.config.localRepositoryPath)).is.not.true();
   });
 
   test('clones a public repository.', async function (): Promise<void> {
@@ -104,14 +100,22 @@ suite('cloneRepo', function (): void {
     const result = await cloneRepo(this.configs.passwordProtectedRepo.config, { passwordFlowOptions: { username: 'klaus', password: 'kappa' }});
 
     assert.that(result.failed).is.true();
-    assert.that(await isGitRepository(this.configs.passwordProtectedRepo.config.localRepositoryPath)).is.not.true();
   });
 
   test('clones a token-protected repository.', async function (): Promise<void> {
-    fail('Not implemented.');
+    assert.that(await isGitRepository(this.configs.tokenProtectedRepo.config.localRepositoryPath)).is.false();
+
+    const result = await cloneRepo(this.configs.tokenProtectedRepo.config, this.configs.tokenProtectedRepo.secrets);
+
+    assert.that(result.failed).is.false();
+    assert.that(await isGitRepository(this.configs.tokenProtectedRepo.config.localRepositoryPath)).is.true();
   });
 
   test('fails cloning a token-protected repository with incorrect credentials.', async function (): Promise<void> {
-    fail('Not implemented.');
+    assert.that(await isGitRepository(this.configs.tokenProtectedRepo.config.localRepositoryPath)).is.not.true();
+
+    const result = await cloneRepo(this.configs.tokenProtectedRepo.config, { tokenFlowOptions: { username: 'klaus', token: 'kappa' }});
+
+    assert.that(result.failed).is.true();
   });
 });
