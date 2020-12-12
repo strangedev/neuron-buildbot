@@ -3,7 +3,7 @@ import { CustomError } from 'defekt';
 import { errors } from '../lib/error';
 import { Secrets } from '../secrets';
 import { Config, Provider } from '../config';
-import { fail, Result } from '../lib/result';
+import { fail, Result } from '@yeldirium/result';
 import * as GenericFlow from './generic';
 
 const makeAuthCallback = function (config: Config, secrets: Secrets): Result<AuthCallback, CustomError> {

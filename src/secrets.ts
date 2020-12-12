@@ -4,7 +4,7 @@ import { errors } from './lib/error';
 import fs from 'fs/promises';
 import { homedir } from 'os';
 import path from 'path';
-import { fail, okay, Result } from './lib/result';
+import { fail, okay, Result } from '@yeldirium/result';
 
 export interface PasswordFlowOptions {
   username: string;

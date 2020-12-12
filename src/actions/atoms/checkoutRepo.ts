@@ -6,13 +6,13 @@ import { getRemoteHeadBranch } from '../../getters/remoteState';
 import git from 'isomorphic-git';
 import { RemoteName } from '../../defaults';
 import { Secrets } from '../../secrets';
-import { fail, nil, Nil, okay, Result } from '../../lib/result';
+import { fail, isFailed, okay, Result } from '@yeldirium/result';
 
-const checkoutRepoWithDetachedHead = async function (config: Config, secrets: Secrets): Promise<Result<Nil, CustomError>> {
+const checkoutRepoWithDetachedHead = async function (config: Config, secrets: Secrets): Promise<Result<void, CustomError>> {
   try {
     const defaultBranchResult = await getRemoteHeadBranch(config, secrets);
 
-    if (defaultBranchResult.failed) {
+    if (isFailed(defaultBranchResult)) {
       return fail(defaultBranchResult.error);
     }
 
@@ -23,7 +23,7 @@ const checkoutRepoWithDetachedHead = async function (config: Config, secrets: Se
       ref: `${RemoteName}/${defaultBranchResult.value}`
     });
 
-    return okay(nil);
+    return okay();
   } catch (ex: unknown) {
     return fail(new errors.CheckingOutBranchFailed(undefined, { cause: ex }));
   }

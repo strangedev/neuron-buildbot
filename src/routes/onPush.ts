@@ -1,4 +1,5 @@
 import { Config } from '../config';
+import { isFailed } from '@yeldirium/result';
 import { Secrets } from '../secrets';
 import { unmarshalPushEvent } from './githubApi';
 import { updateAndBuild } from '../actions/processes/updateAndBuild';
@@ -11,7 +12,7 @@ export const registerRoute = function (config: Config, secrets: Secrets, logger:
 
     const unmarshalResult = unmarshalPushEvent(request.body);
 
-    if (unmarshalResult.failed) {
+    if (isFailed(unmarshalResult)) {
       logger.log(Level.Error, `⁉️  Cannot unmarshal request: ${unmarshalResult.error.message}`);
       response.status(400).send();
 

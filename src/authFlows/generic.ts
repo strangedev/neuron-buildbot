@@ -3,7 +3,7 @@ import { errors } from '../lib/error';
 import { Secrets } from '../secrets';
 import { AuthCallback, GitAuth } from 'isomorphic-git';
 import { AuthFlow, Config } from '../config';
-import { fail, okay, Result } from '../lib/result';
+import { fail, okay, Result } from '@yeldirium/result';
 
 const makeAuthCallback = function (config: Config, secrets: Secrets): Result<AuthCallback, CustomError> {
   switch (config.authFlow) {

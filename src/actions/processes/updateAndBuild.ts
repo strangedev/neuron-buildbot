@@ -4,13 +4,13 @@ import { Config } from '../../config';
 import { CustomError } from 'defekt';
 import { fetchRepo } from '../atoms/fetchRepo';
 import { Secrets } from '../../secrets';
-import { fail, Nil, nil, okay, Result } from '../../lib/result';
+import { fail, isFailed, okay, Result } from '@yeldirium/result';
 import { Level, Logger } from '../../lib/logger';
 
-const updateAndBuild = async function (config: Config, secrets: Secrets, logger: Logger): Promise<Result<Nil, CustomError>> {
+const updateAndBuild = async function (config: Config, secrets: Secrets, logger: Logger): Promise<Result<void, CustomError>> {
   const fetch = await fetchRepo(config, secrets);
 
-  if (fetch.failed) {
+  if (isFailed(fetch)) {
     logger.log(Level.Error, `💥 Cannot fetch from ${config.repositoryUrl}: ${fetch.error.message}`);
 
     return fail(fetch.error);
@@ -19,7 +19,7 @@ const updateAndBuild = async function (config: Config, secrets: Secrets, logger:
 
   const checkout = await checkoutRepoWithDetachedHead(config, secrets);
 
-  if (checkout.failed) {
+  if (isFailed(checkout)) {
     logger.log(Level.Error, `💥 Cannot checkout remote HEAD: ${checkout.error.message}`);
 
     return fail(checkout.error);
@@ -28,14 +28,14 @@ const updateAndBuild = async function (config: Config, secrets: Secrets, logger:
 
   const build = buildNeuron(config);
 
-  if (build.failed) {
+  if (isFailed(build)) {
     logger.log(Level.Error, `💥 Cannot build your zettelkasten: ${build.error.message}`);
 
     return fail(build.error);
   }
   logger.log(Level.Info, '🔨 Built zettelkasten.');
 
-  return okay(nil);
+  return okay();
 };
 
 export {
