@@ -21,17 +21,29 @@ const setOptions = (options: GitHttpServerOptions): void => {
   shell.env.GIT_HTTP_MOCK_SERVER_ALLOW_ORIGIN = options.GIT_HTTP_MOCK_SERVER_ALLOW_ORIGIN ?? '*';
 };
 
-const start = (options: GitHttpServerOptions): void => {
+const start = async (options: GitHttpServerOptions): Promise<void> => new Promise((resolve, reject): void => {
   shell.cd(fixturesPath);
   setOptions(options);
-  shell.exec('npx git-http-mock-server start');
-};
+  shell.exec('npx git-http-mock-server start', (code): void => {
+    if (code === 0) {
+      resolve();
+    } else {
+      reject(code);
+    }
+  });
+});
 
-const stop = (options: GitHttpServerOptions): void => {
+const stop = async (options: GitHttpServerOptions): Promise<void> => new Promise((resolve, reject): void => {
   shell.cd(fixturesPath);
   setOptions(options);
-  shell.exec('npx git-http-mock-server stop');
-};
+  shell.exec('npx git-http-mock-server stop', (code): void => {
+    if (code === 0) {
+      resolve();
+    } else {
+      reject(code);
+    }
+  });
+});
 
 export type {
   GitHttpServerOptions
