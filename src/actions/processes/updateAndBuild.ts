@@ -7,7 +7,7 @@ import { Secrets } from '../../secrets';
 import { fail, isFailed, okay, Result } from '@yeldirium/result';
 import { Level, Logger } from '../../lib/logger';
 
-const updateAndBuild = async function (config: Config, secrets: Secrets, logger: Logger): Promise<Result<undefined, CustomError>> {
+const updateAndBuild = async function (config: Config, secrets: Secrets, logger: Logger): Promise<Result<void, CustomError>> {
   const fetch = await fetchRepo(config, secrets);
 
   if (isFailed(fetch)) {

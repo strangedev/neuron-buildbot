@@ -9,7 +9,7 @@ import { RemoteName } from '../../defaults';
 import { Secrets } from '../../secrets';
 import { fail, okay, Result, unpackOrCrash } from '@yeldirium/result';
 
-const cloneRepo = async function (config: Config, secrets: Secrets): Promise<Result<undefined, CustomError>> {
+const cloneRepo = async function (config: Config, secrets: Secrets): Promise<Result<void, CustomError>> {
   try {
     await fs.promises.mkdir(config.localRepositoryPath);
   } catch {

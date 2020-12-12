@@ -8,7 +8,7 @@ import { makeAuthCallback } from '../../authFlows';
 import { Secrets } from '../../secrets';
 import { fail, okay, Result, unpackOrCrash } from '@yeldirium/result';
 
-const fetchRepo = async function (config: Config, secrets: Secrets): Promise<Result<undefined, CustomError>> {
+const fetchRepo = async function (config: Config, secrets: Secrets): Promise<Result<void, CustomError>> {
   try {
     await git.fetch({
       fs,
