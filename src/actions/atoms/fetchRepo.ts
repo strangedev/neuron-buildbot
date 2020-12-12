@@ -6,18 +6,18 @@ import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
 import { makeAuthCallback } from '../../authFlows';
 import { Secrets } from '../../secrets';
-import { fail, nil, Nil, okay, Result } from '../../lib/result';
+import { fail, okay, Result, unpackOrCrash } from '@yeldirium/result';
 
-const fetchRepo = async function (config: Config, secrets: Secrets): Promise<Result<Nil, CustomError>> {
+const fetchRepo = async function (config: Config, secrets: Secrets): Promise<Result<undefined, CustomError>> {
   try {
     await git.fetch({
       fs,
       http,
-      onAuth: makeAuthCallback(config, secrets).orCrash(),
+      onAuth: unpackOrCrash(makeAuthCallback(config, secrets)),
       dir: config.localRepositoryPath
     });
 
-    return okay(nil);
+    return okay();
   } catch (ex: unknown) {
     return fail(new errors.FetchingRepositoryFailed(undefined, { cause: ex }));
   }

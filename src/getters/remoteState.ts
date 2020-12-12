@@ -5,13 +5,13 @@ import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
 import { makeAuthCallback } from '../authFlows';
 import { Secrets } from '../secrets';
-import { fail, okay, Result } from '../lib/result';
+import { fail, okay, Result, unpackOrCrash } from '@yeldirium/result';
 
 const getRemoteHeadBranch = async function (config: Config, secrets: Secrets): Promise<Result<string, CustomError>> {
   try {
     const remoteInfo: any = await git.getRemoteInfo({
       http,
-      onAuth: makeAuthCallback(config, secrets).orCrash(),
+      onAuth: unpackOrCrash(makeAuthCallback(config, secrets)),
       url: config.repositoryUrl
     });
 
