@@ -1,5 +1,6 @@
 import { assert } from 'assertthat';
 import { cloneRepo } from 'src/actions/atoms/cloneRepo';
+import { isFailed } from '@yeldirium/result';
 import { isGitRepository } from 'test/shared/git';
 import TmpDir from '../shared/tmpDir';
 import { AuthFlow, Provider } from 'src/config';
@@ -74,14 +75,14 @@ suite('cloneRepo', function (): void {
     assert.that(await isGitRepository(this.configs.nonexistentRepo.config.localRepositoryPath)).is.not.true();
     const result = await cloneRepo(this.configs.nonexistentRepo.config, this.configs.nonexistentRepo.secrets);
 
-    assert.that(result.failed).is.true();
+    assert.that(isFailed(result)).is.true();
   });
 
   test('clones a public repository.', async function (): Promise<void> {
     assert.that(await isGitRepository(this.configs.publicRepo.config.localRepositoryPath)).is.not.true();
     const result = await cloneRepo(this.configs.publicRepo.config, this.configs.publicRepo.secrets);
 
-    assert.that(result.failed).is.false();
+    assert.that(isFailed(result)).is.false();
     assert.that(await isGitRepository(this.configs.publicRepo.config.localRepositoryPath)).is.true();
   });
 
@@ -90,7 +91,7 @@ suite('cloneRepo', function (): void {
 
     const result = await cloneRepo(this.configs.passwordProtectedRepo.config, this.configs.passwordProtectedRepo.secrets);
 
-    assert.that(result.failed).is.false();
+    assert.that(isFailed(result)).is.false();
     assert.that(await isGitRepository(this.configs.passwordProtectedRepo.config.localRepositoryPath)).is.true();
   });
 
@@ -99,7 +100,7 @@ suite('cloneRepo', function (): void {
 
     const result = await cloneRepo(this.configs.passwordProtectedRepo.config, { passwordFlowOptions: { username: 'klaus', password: 'kappa' }});
 
-    assert.that(result.failed).is.true();
+    assert.that(isFailed(result)).is.true();
   });
 
   test('clones a token-protected repository.', async function (): Promise<void> {
@@ -107,7 +108,7 @@ suite('cloneRepo', function (): void {
 
     const result = await cloneRepo(this.configs.tokenProtectedRepo.config, this.configs.tokenProtectedRepo.secrets);
 
-    assert.that(result.failed).is.false();
+    assert.that(isFailed(result)).is.false();
     assert.that(await isGitRepository(this.configs.tokenProtectedRepo.config.localRepositoryPath)).is.true();
   });
 
@@ -116,6 +117,6 @@ suite('cloneRepo', function (): void {
 
     const result = await cloneRepo(this.configs.tokenProtectedRepo.config, { tokenFlowOptions: { username: 'klaus', token: 'kappa' }});
 
-    assert.that(result.failed).is.true();
+    assert.that(isFailed(result)).is.true();
   });
 });
