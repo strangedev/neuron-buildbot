@@ -32,7 +32,7 @@ RUN nix-env --install tini-${TINI_VERSION}
 ENTRYPOINT ["tini", "--"]
 
 # install neuron
-ENV NEURON_VERSION 5b6f9867d48dde1662c0e9adb5b1779f9ec214cd
+ENV NEURON_VERSION 1d4656c06a896f42b2e644a4358c5259c7f5594e
 RUN nix-env -iA cachix -f https://cachix.org/api/v1/install
 RUN cachix use srid
 RUN nix-env -if https://github.com/srid/neuron/archive/${NEURON_VERSION}.tar.gz
