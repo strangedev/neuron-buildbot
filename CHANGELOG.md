@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/strangedev/neuron-buildbot/compare/v1.4.0...v1.5.0) (2021-01-11)
+
+
+### Features
+
+* Update neuron version. ([#6](https://github.com/strangedev/neuron-buildbot/issues/6)) ([845aff4](https://github.com/strangedev/neuron-buildbot/commit/845aff4eb754158ba18a72d1bbbaf1a6c9ab16cd))
+
 # [1.4.0](https://github.com/strangedev/neuron-buildbot/compare/v1.3.0...v1.4.0) (2020-12-06)
 
 
