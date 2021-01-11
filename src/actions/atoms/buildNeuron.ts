@@ -7,7 +7,7 @@ import { fail, okay, Result } from '@yeldirium/result';
 const buildNeuron = function (config: Config): Result<string, CustomError> {
   try {
     const stdout = shell.exec(
-      `neuron -d ${config.localRepositoryPath} rib`,
+      `neuron -d ${config.localRepositoryPath} gen`,
       {
         silent: true
       }
