@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/strangedev/neuron-buildbot/compare/v1.5.0...v1.5.1) (2021-05-08)
+
+
+### Bug Fixes
+
+* update deps ([0785afd](https://github.com/strangedev/neuron-buildbot/commit/0785afda0215492b457b73a624a4a0bb51a4008f))
+
 # [1.5.0](https://github.com/strangedev/neuron-buildbot/compare/v1.4.0...v1.5.0) (2021-01-11)
 
 
